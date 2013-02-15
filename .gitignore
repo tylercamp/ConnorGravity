@@ -14,10 +14,8 @@
 
 # Visual Studio
 *.obj
-*.exe
 *.exp
 *.pdb
-*.dll
 *.user
 *.aps
 *.pch
@@ -33,12 +31,11 @@
 *.ilk
 *.log
 *.zip
-[Dd]ebug*/
-*.lib
 *.sbr
+*.tlog
+*.lastbuildstate
+*.idb
 Thumbs.db
-[Ll]ib/
-[Rr]elease*/
 [Tt]est[Rr]esults/
 _UpgradeReport_Files/
 _ReSharper.*/

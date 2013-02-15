@@ -1,0 +1,134 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{0654C0A8-7D98-4B63-9372-96AE8ED6F9A4}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>ConnorGravity</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>../include;$(IncludePath)</IncludePath>
+    <LibraryPath>../lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <IncludePath>../include;$(IncludePath)</IncludePath>
+    <ReferencePath>$(ReferencePath)</ReferencePath>
+    <LibraryPath>../lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="AppMain.cpp" />
+    <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="FontDefaults SDL_ttf.cpp" />
+    <ClCompile Include="ORGUI\Button.cpp" />
+    <ClCompile Include="ORGUI\FontDefaults SDL_ttf.cpp" />
+    <ClCompile Include="ORGUI\FontModule.cpp" />
+    <ClCompile Include="ORGUI\InputDefaults SDL.cpp" />
+    <ClCompile Include="ORGUI\InputModule.cpp" />
+    <ClCompile Include="ORGUI\InterfaceComponent.cpp" />
+    <ClCompile Include="ORGUI\Module.cpp" />
+    <ClCompile Include="ORGUI\ORGUI.cpp" />
+    <ClCompile Include="ORGUI\RenderDefaults OpenGL.cpp" />
+    <ClCompile Include="ORGUI\RenderModule.cpp" />
+    <ClCompile Include="ORGUI\Shapes.cpp" />
+    <ClCompile Include="ORGUI\Text.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Camera.h" />
+    <ClInclude Include="Font SDL_ttf.h" />
+    <ClInclude Include="NewtonianUniverse.h" />
+    <ClInclude Include="ORGUI\Button.h" />
+    <ClInclude Include="ORGUI\Color.h" />
+    <ClInclude Include="ORGUI\Events.h" />
+    <ClInclude Include="ORGUI\Font SDL_ttf.h" />
+    <ClInclude Include="ORGUI\FontImpl.h" />
+    <ClInclude Include="ORGUI\FontModule.h" />
+    <ClInclude Include="ORGUI\Hash.h" />
+    <ClInclude Include="ORGUI\Hookable.h" />
+    <ClInclude Include="ORGUI\InputEvent SDL.h" />
+    <ClInclude Include="ORGUI\InputEvent.h" />
+    <ClInclude Include="ORGUI\InputKeyCodes.h" />
+    <ClInclude Include="ORGUI\InputModule.h" />
+    <ClInclude Include="ORGUI\InputStateChange.h" />
+    <ClInclude Include="ORGUI\InterfaceComponent.h" />
+    <ClInclude Include="ORGUI\math.h" />
+    <ClInclude Include="ORGUI\Module.h" />
+    <ClInclude Include="ORGUI\ORGUI.h" />
+    <ClInclude Include="ORGUI\Point.h" />
+    <ClInclude Include="ORGUI\RenderModule.h" />
+    <ClInclude Include="ORGUI\Shapes.h" />
+    <ClInclude Include="ORGUI\Text.h" />
+    <ClInclude Include="Settings.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
