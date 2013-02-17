@@ -34,14 +34,14 @@ CCamera::CCamera ()
 	autoUpdateMouseRelationalPoint = false;
 
 	useMouseSmoothing = false;
-	mouseVelocity = vec3f::ZERO;
+	mouseVelocity = vec3d::ZERO;
 	mouseVelocityDampening = 0.07f;
 	mouseVelocityFriction = 0.5f;
 }
 
-CCamera & CCamera::Move (float distance, float relativeDirection)
+CCamera & CCamera::Move (double distance, double relativeDirection)
 {
-	float rotX = 0.0f;
+	double rotX = 0.0f;
 
 	if (moveY)
 	{
@@ -59,22 +59,22 @@ CCamera & CCamera::Move (float distance, float relativeDirection)
 	return *this;
 }
 
-CCamera & CCamera::MoveForward (float distance)
+CCamera & CCamera::MoveForward (double distance)
 {
 	return Move (distance, 90);
 }
 
-CCamera & CCamera::MoveBackward (float distance)
+CCamera & CCamera::MoveBackward (double distance)
 {
 	return Move (distance, 270);
 }
 
-CCamera & CCamera::MoveRight (float distance)
+CCamera & CCamera::MoveRight (double distance)
 {
 	return Move (distance, 0);
 }
 
-CCamera & CCamera::MoveLeft (float distance)
+CCamera & CCamera::MoveLeft (double distance)
 {
 	return Move (distance, 180);
 }
@@ -97,7 +97,7 @@ CCamera & CCamera::SetMoveZ (bool yes)
 	return *this;
 }
 
-CCamera & CCamera::TurnOnX (float amount)
+CCamera & CCamera::TurnOnX (double amount)
 {
 	rotation.x() += amount;
 
@@ -106,7 +106,7 @@ CCamera & CCamera::TurnOnX (float amount)
 	return *this;
 }
 
-CCamera & CCamera::TurnOnY (float amount)
+CCamera & CCamera::TurnOnY (double amount)
 {
 	rotation.y() += amount;
 
@@ -164,7 +164,7 @@ void CCamera::ApplyCameraTransformationsFromMouseVelocity ()
 	//		preserving the previous mouse velocity.
 	if (!useMouseSmoothing)
 	{
-		mouseVelocity = vec3f::ZERO;
+		mouseVelocity = vec3d::ZERO;
 		return;
 	}
 

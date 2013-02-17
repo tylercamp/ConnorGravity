@@ -35,38 +35,43 @@
 #pragma comment (lib, "libfio.lib")
 #endif
 
-float randrange (float min, float max)
+double randrange (double min, double max)
 {
-	return ((((float)rand()) / RAND_MAX) * (max - min)) + min;
+	return ((((double)rand()) / RAND_MAX) * (max - min)) + min;
+}
+
+double randrangebinomial (double min, double max)
+{
+	return pow (randrange (0.0, 1.0), 20.0) * (max - min) + min;
 }
 
 void GenerateRandomBodies (NewtonianUniverse * universe)
 {
-	int bodyCount = 50;
+	int bodyCount = 100;
 	int maxSpawnRange = 1500;
-	float minMass = 10, maxMass = 5000;
+	double minMass = 2.0f, maxMass = 1000000.0f;
 	int maxVel = 350;
 	for (int i = 0; i < bodyCount; i++)
 	{
 		UniverseBody * body = new UniverseBody ();
-		body->position = vec3f (randrange (-maxSpawnRange, maxSpawnRange), randrange (-maxSpawnRange, maxSpawnRange), 0.0f);
-		body->mass = randrange (minMass, maxMass);
-		float angle = randrange (0.0f, 6.282f);
-		float vel = randrange (0.0f, maxVel);
+		body->position = vec3d (randrange (-maxSpawnRange, maxSpawnRange), randrange (-maxSpawnRange, maxSpawnRange), 0.0f);
+		body->mass = randrangebinomial (minMass, maxMass);
+		double angle = randrange (0.0f, 6.282f);
+		double vel = randrange (0.0f, maxVel);
 		body->velocity.x () = cosf (angle) * vel;
 		body->velocity.y () = sinf (angle) * vel;
-		body->density = 2.0f;
+		body->density = 1.2f;
 		universe->AddBody (body);
 	}
 
 	/*
-	float startDistance = 10.0f;
+	double startDistance = 10.0f;
 
 	for (int i = 0; i < bodyCount; i++)
 	{
 		UniverseBody * body = new UniverseBody ();
-		float angle = randrange (0.0f, MATH_2_PI);
-		vec3f normal;
+		double angle = randrange (0.0f, MATH_2_PI);
+		vec3d normal;
 		normal.x () = cosf (angle);
 		normal.y () = sinf (angle);
 		normal.z () = 0.0f;
@@ -93,7 +98,7 @@ int main ()
 	glClearColor (0.0f, 0.0f, 0.0f, 0.0f);
 
 	glMatrixMode (GL_PROJECTION);
-	gluPerspective (45.0f, (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 1.0, 1000000.0);
+	gluPerspective (45.0f, (double)SCREEN_WIDTH / (double)SCREEN_HEIGHT, 1.0, 1000000.0);
 
 	glEnable (GL_BLEND);
 	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -106,7 +111,7 @@ int main ()
 	CCamera camera;
 	camera.useMouseSmoothing = true;
 	camera.autoUpdateMouseRelationalPoint = true;
-	float scrollSpeed = 10.0f;
+	double scrollSpeed = 10.0f;
 
 	camera.SetMoveX (true);
 	camera.SetMoveY (true);
@@ -132,7 +137,7 @@ int main ()
 	timeDeltaDisplay->m_Color = gui::COLOR_WHITE;
 	GUI.AddChild (timeDeltaDisplay);
 
-	float speed = 0.0f;
+	double speed = 0.0f;
 
 	bool run = true;
 	while (run)
@@ -183,6 +188,10 @@ int main ()
 			{
 				SCREEN_WIDTH = e.resize.w;
 				SCREEN_HEIGHT = e.resize.h;
+
+				glMatrixMode (GL_PROJECTION);
+				glLoadIdentity ();
+				gluPerspective (45.0f, (double)SCREEN_WIDTH / (double)SCREEN_HEIGHT, 1.0, 1000000.0);
 			}
 		}
 
@@ -205,7 +214,7 @@ int main ()
 		glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		DWORD curTime = timeGetTime ();
-		float dt = (curTime - prevTime) / 1000.0f;
+		double dt = (curTime - prevTime) / 1000.0f;
 		universe.Update (dt);
 		prevTime = curTime;
 

@@ -40,17 +40,17 @@ class NewtonianUniverse;
 class UniverseBody
 {
 public:
-	float mass;
-	float density;
-	vec3f velocity;
-	vec3f position;
+	double mass;
+	double density;
+	vec3d velocity;
+	vec3d position;
 
-	float volume () const
+	double volume () const
 	{
 		return mass / density;
 	}
 
-	float radius () const
+	double radius () const
 	{
 		return powf (volume () / 4.1888f, 1.0f/3.0f);
 	}
@@ -75,8 +75,8 @@ public:
 	{
 		mass = 0.0f;
 		density = 0.0f;
-		velocity = vec3f::ZERO;
-		position = vec3f::ZERO;
+		velocity = vec3d::ZERO;
+		position = vec3d::ZERO;
 	}
 
 	virtual ~UniverseBody ()
@@ -95,7 +95,7 @@ protected:
 class NewtonianUniverse
 {
 public:
-	void Update (float dt)
+	void Update (double dt)
 	{
 		std::vector <UniverseBody *> bodyDestroyQueue;
 
@@ -137,15 +137,15 @@ public:
 		{
 			(*iter)->position += (*iter)->velocity * dt;
 
-			vec3f gravForce = vec3f::ZERO;
+			vec3d gravForce = vec3d::ZERO;
 			//	Get the sum gravitational force
 			for (auto bodies = m_Bodies.begin (); bodies != m_Bodies.end (); bodies++)
 			{
 				if (bodies == iter)
 					continue;
 
-				vec3f forceVec = (*bodies)->position - (*iter)->position;
-				float dist = forceVec.length();
+				vec3d forceVec = (*bodies)->position - (*iter)->position;
+				double dist = forceVec.length();
 				forceVec.normalize ();
 				forceVec *= (((*bodies)->mass * (*iter)->mass) / (dist * dist)) * GRAVITATIONAL_CONSTANT;
 				gravForce += forceVec;

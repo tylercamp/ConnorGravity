@@ -17,9 +17,9 @@ using namespace vmml;
 class CCamera
 {
 public:
-	vec3f position, rotation;
+	vec3d position, rotation;
 	//	Position to use as a reference when using TurnByMouseDelta functions.
-	vec3f mouseRelationalPoint;
+	vec3d mouseRelationalPoint;
 	//	MoveY is the only one disabled by default
 	bool moveX, moveY, moveZ;
 
@@ -29,17 +29,17 @@ public:
 
 	//	Multiplicative (direct relationship), can increase or decrease the speed of mouse
 	//		movement when mouse smoothing is disabled. Default 0.1f.
-	float mouseDampening;
+	double mouseDampening;
 
 	//	Optional, smooths out camera rotations based on mouse input (less jittery), Default false.
 	bool useMouseSmoothing;
-	vec3f mouseVelocity;
+	vec3d mouseVelocity;
 
 	//	Multiplicative (direct relationship), can increase or decrease the speed of mouse
 	//		movement when mouse smoothing is enabled. Default 0.07f.
-	float mouseVelocityDampening;
+	double mouseVelocityDampening;
 
-	float mouseVelocityFriction;
+	double mouseVelocityFriction;
 
 	CCamera & operator= (const CCamera & o);
 
@@ -49,17 +49,17 @@ public:
 	CCamera &	SetMoveY (bool yes);
 	CCamera &	SetMoveZ (bool yes);
 
-	CCamera &	Move (float distance, float relativeDirection);
-	CCamera &	MoveForward (float distance);
-	CCamera &	MoveBackward (float distance);
-	CCamera &	MoveLeft (float distance);
-	CCamera &	MoveRight (float distance);
+	CCamera &	Move (double distance, double relativeDirection);
+	CCamera &	MoveForward (double distance);
+	CCamera &	MoveBackward (double distance);
+	CCamera &	MoveLeft (double distance);
+	CCamera &	MoveRight (double distance);
 
 
 	//	Degrees (Negative = Down, Positive = Up)
-	CCamera &	TurnOnX (float amount);
+	CCamera &	TurnOnX (double amount);
 	//	Degrees	(Negative = Right, Positive = Left)
-	CCamera &	TurnOnY (float amount);
+	CCamera &	TurnOnY (double amount);
 
 	CCamera &	TurnOnXByMouseDelta (int mouseY);
 	CCamera &	TurnOnYByMouseDelta (int mouseX);
