@@ -84,7 +84,7 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy "..\Release" "E:\Dropbox\OverReact\ConnorGravityRelease" /I  /E</Command>
+      <Command>xcopy "..\Release" "E:\Dropbox\OverReact\ConnorGravityRelease" /I  /E /Y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>

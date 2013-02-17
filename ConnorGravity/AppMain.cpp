@@ -55,7 +55,7 @@ void GenerateRandomBodies (NewtonianUniverse * universe)
 		float vel = randrange (0.0f, maxVel);
 		body->velocity.x () = cosf (angle) * vel;
 		body->velocity.y () = sinf (angle) * vel;
-		body->density = 6.0f;
+		body->density = 2.0f;
 		universe->AddBody (body);
 	}
 
