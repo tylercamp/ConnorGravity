@@ -178,6 +178,16 @@ public:
 		body->mm_BodyPosition = m_Bodies.end ();
 	}
 
+	void ReleaseAllBodies ()
+	{
+		for (auto iter = m_Bodies.begin (); iter != m_Bodies.end (); iter++)
+		{
+			delete *iter;
+		}
+
+		m_Bodies.clear ();
+	}
+
 private:
 	std::list <UniverseBody *> m_Bodies;
 };

@@ -40,28 +40,8 @@ float randrange (float min, float max)
 	return ((((float)rand()) / RAND_MAX) * (max - min)) + min;
 }
 
-int main ()
+void GenerateRandomBodies (NewtonianUniverse * universe)
 {
-	SDL_Init (SDL_INIT_EVERYTHING);
-	TTF_Init ();
-
-	SDL_GL_SetAttribute (SDL_GL_DEPTH_SIZE, 32);
-	SDL_Surface * screen = SDL_SetVideoMode (SCREEN_WIDTH, SCREEN_HEIGHT, 32, SDL_OPENGL);
-
-	glClearColor (0.0f, 0.0f, 0.0f, 0.0f);
-
-	glMatrixMode (GL_PROJECTION);
-	gluPerspective (45.0f, (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 1.0, 1000000.0);
-
-	glEnable (GL_BLEND);
-	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-	glEnable (GL_TEXTURE_2D);
-
-	NewtonianUniverse universe;
-
-	srand (time (NULL));
-
 	int bodyCount = 50;
 	int maxSpawnRange = 1500;
 	float minMass = 10, maxMass = 5000;
@@ -76,7 +56,7 @@ int main ()
 		body->velocity.x () = cosf (angle) * vel;
 		body->velocity.y () = sinf (angle) * vel;
 		body->density = 6.0f;
-		universe.AddBody (body);
+		universe->AddBody (body);
 	}
 
 	/*
@@ -98,6 +78,30 @@ int main ()
 		universe.AddBody (body);
 	}
 	*/
+}
+
+int main ()
+{
+	srand (time (NULL));
+
+	SDL_Init (SDL_INIT_EVERYTHING);
+	TTF_Init ();
+
+	SDL_GL_SetAttribute (SDL_GL_DEPTH_SIZE, 32);
+	SDL_Surface * screen = SDL_SetVideoMode (SCREEN_WIDTH, SCREEN_HEIGHT, 32, SDL_OPENGL | SDL_RESIZABLE);
+
+	glClearColor (0.0f, 0.0f, 0.0f, 0.0f);
+
+	glMatrixMode (GL_PROJECTION);
+	gluPerspective (45.0f, (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 1.0, 1000000.0);
+
+	glEnable (GL_BLEND);
+	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	glEnable (GL_TEXTURE_2D);
+
+	NewtonianUniverse universe;
+	GenerateRandomBodies (&universe);
 
 	CCamera camera;
 	camera.useMouseSmoothing = true;
@@ -147,6 +151,12 @@ int main ()
 			{
 				if (e.key.keysym.sym == SDLK_SPACE)
 					speed = 0.0f;
+				if (e.key.keysym.sym == SDLK_TAB)
+				{
+					if (e.key.keysym.mod & KMOD_CTRL)
+						universe.ReleaseAllBodies ();
+					GenerateRandomBodies (&universe);
+				}
 			}
 
 			if (e.type == SDL_MOUSEBUTTONDOWN)
@@ -168,6 +178,12 @@ int main ()
 
 			if (e.type == SDL_MOUSEBUTTONUP)
 				isDragging = false;
+
+			if (e.type == SDL_VIDEORESIZE)
+			{
+				SCREEN_WIDTH = e.resize.w;
+				SCREEN_HEIGHT = e.resize.h;
+			}
 		}
 
 

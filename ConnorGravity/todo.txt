@@ -1,5 +1,4 @@
 
-Camera revamp
 Color based on distance
 Body lighting
 Angular momentum/visual
