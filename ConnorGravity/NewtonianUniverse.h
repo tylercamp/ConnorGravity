@@ -11,6 +11,28 @@
 
 #include "Settings.h"
 
+/*
+
+Collision between bodies of different densities will always cause the body of lower density to shatter if it passes a threshold
+	The amount of shatter is based on their relative velocities.
+
+The shatter point (by relative velocity magnitude) between two bodies will be dependent on the difference between their densities.
+	The shatter point is also linearly dependent on each body's density.
+
+Shatter checks will always be ran first.
+
+If a shatter has not been effected, then the two bodies are plausible for combination. If the velocity of either body
+	is not great enough to prevent a collision between the two on the next frame (as a result of pull-back from gravity)
+	then the two are combined.
+
+	Values of the new body:
+	 position - Weighted average, based on volume
+	 mass - Sum of the two
+	 density - Weighted average, based on mass
+	 velocity - Average of the two velocities upon collision
+
+*/
+
 using namespace vmml;
 
 class NewtonianUniverse;
@@ -18,40 +40,40 @@ class NewtonianUniverse;
 class UniverseBody
 {
 public:
-	float radius;
+	float mass;
 	float density;
 	vec3f velocity;
 	vec3f position;
 
-	float volume ()
+	float volume () const
 	{
-		return 4.1888f * (radius * radius * radius);
+		return mass / density;
 	}
 
-	float mass ()
+	float radius () const
 	{
-		return density * volume ();
+		return powf (volume () / 4.1888f, 1.0f/3.0f);
 	}
 
 	bool CollidesWith (UniverseBody * other) const
 	{
-		return (position - other->position).length () <= radius + other->radius;
+		return (position - other->position).length () <= radius() + other->radius();
 	}
 
-	virtual void Draw ()
+	virtual void Draw () const
 	{
 		glPushMatrix ();
 		glTranslatef (position.x(), position.y(), position.z());
 		GLUquadricObj * quadric = gluNewQuadric ();
 		glColor3f (1.0f, 1.0f, 1.0f);
-		gluSphere (quadric, radius, 36, 36);
+		gluSphere (quadric, radius(), 36, 36);
 		gluDeleteQuadric (quadric);
 		glPopMatrix ();
 	}
 
 	UniverseBody ()
 	{
-		radius = 0.0f;
+		mass = 0.0f;
 		density = 0.0f;
 		velocity = vec3f::ZERO;
 		position = vec3f::ZERO;
@@ -90,14 +112,14 @@ public:
 
 				if ((*iter)->CollidesWith (*col))
 				{
-					if ((*iter)->radius > (*col)->radius)
+					if ((*iter)->radius() > (*col)->radius())
 					{
-						(*iter)->radius += (*col)->radius;
+						(*iter)->mass += (*col)->mass;
 						bodyDestroyQueue.push_back (*col);
 					}
 					else
 					{
-						(*col)->radius += (*iter)->radius;
+						(*col)->mass += (*iter)->mass;
 						bodyDestroyQueue.push_back (*iter);
 					}
 				}
@@ -125,11 +147,11 @@ public:
 				vec3f forceVec = (*bodies)->position - (*iter)->position;
 				float dist = forceVec.length();
 				forceVec.normalize ();
-				forceVec *= (((*bodies)->mass () * (*iter)->mass ()) / (dist * dist)) * GRAVITATIONAL_CONSTANT;
+				forceVec *= (((*bodies)->mass * (*iter)->mass) / (dist * dist)) * GRAVITATIONAL_CONSTANT;
 				gravForce += forceVec;
 			}
 
-			(*iter)->velocity += (gravForce * dt) / (*iter)->mass ();
+			(*iter)->velocity += (gravForce * dt) / (*iter)->mass;
 		}
 	}
 

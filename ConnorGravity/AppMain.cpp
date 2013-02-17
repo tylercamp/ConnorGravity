@@ -17,6 +17,7 @@
 #include "Camera.h"
 
 #include "ORGUI\ORGUI.h"
+#include "ORGUI\math.h"
 
 #ifdef main
 # undef main
@@ -61,15 +62,15 @@ int main ()
 
 	srand (time (NULL));
 
-	int bodyCount = 100;
+	int bodyCount = 200;
 	int maxSpawnRange = 1500;
-	float maxRadius = 5, minRadius = 3;
+	float minMass = 10, maxMass = 5000;
 	int maxVel = 350;
 	for (int i = 0; i < bodyCount; i++)
 	{
 		UniverseBody * body = new UniverseBody ();
 		body->position = vec3f (randrange (-maxSpawnRange, maxSpawnRange), randrange (-maxSpawnRange, maxSpawnRange), 0.0f);
-		body->radius = randrange (minRadius, maxRadius);
+		body->mass = randrange (minMass, maxMass);
 		float angle = randrange (0.0f, 6.282f);
 		float vel = randrange (0.0f, maxVel);
 		body->velocity.x () = cosf (angle) * vel;
@@ -77,6 +78,26 @@ int main ()
 		body->density = 6.0f;
 		universe.AddBody (body);
 	}
+
+	/*
+	float startDistance = 10.0f;
+
+	for (int i = 0; i < bodyCount; i++)
+	{
+		UniverseBody * body = new UniverseBody ();
+		float angle = randrange (0.0f, MATH_2_PI);
+		vec3f normal;
+		normal.x () = cosf (angle);
+		normal.y () = sinf (angle);
+		normal.z () = 0.0f;
+
+		body->position = normal * startDistance;
+		body->velocity = normal * randrange (maxVel / 2.0f, maxVel);
+		body->density = 6.0f;
+		body->radius = 2;
+		universe.AddBody (body);
+	}
+	*/
 
 	CCamera camera;
 	camera.useMouseSmoothing = true;
