@@ -48,11 +48,11 @@ CCamera & CCamera::Move (float distance, float relativeDirection)
 		//	TODO: Uses incorrect equation for spherical coordinates, implement
 		//		using CVector::VectorFromSphericalCoordinates
 		rotX = rotation.x();
-		position.y() += sinf (dtr (rotation.x())) * distance;
+		position.y() -= sinf (dtr (rotation.x())) * distance;
 	}
 
 	if (moveX)
-		position.x() += cosf (dtr (rotation.y() + relativeDirection)) * distance * cosf (dtr (rotX));
+		position.x() -= cosf (dtr (rotation.y() + relativeDirection)) * distance * cosf (dtr (rotX));
 	if (moveZ)
 		position.z() -= sinf (dtr (rotation.y() + relativeDirection)) * distance * cosf (dtr (rotX));
 

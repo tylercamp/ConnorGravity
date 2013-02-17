@@ -100,6 +100,9 @@
     <ClCompile Include="ORGUI\RenderModule.cpp" />
     <ClCompile Include="ORGUI\Shapes.cpp" />
     <ClCompile Include="ORGUI\Text.cpp" />
+    <Text Include="todo.txt">
+      <FileType>CppCode</FileType>
+    </Text>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />

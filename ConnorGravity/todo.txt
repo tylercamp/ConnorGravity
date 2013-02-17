@@ -1,0 +1,8 @@
+
+Camera revamp
+Color based on distance
+Body lighting
+Angular momentum/visual
+Bounce
+Click for (anti)gravity
+Break

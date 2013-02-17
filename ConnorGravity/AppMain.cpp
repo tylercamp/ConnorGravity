@@ -62,7 +62,7 @@ int main ()
 
 	srand (time (NULL));
 
-	int bodyCount = 200;
+	int bodyCount = 50;
 	int maxSpawnRange = 1500;
 	float minMass = 10, maxMass = 5000;
 	int maxVel = 350;
@@ -102,7 +102,11 @@ int main ()
 	CCamera camera;
 	camera.useMouseSmoothing = true;
 	camera.autoUpdateMouseRelationalPoint = true;
-	float scrollSpeed = 1.1f;
+	float scrollSpeed = 10.0f;
+
+	camera.SetMoveX (true);
+	camera.SetMoveY (true);
+	camera.SetMoveZ (true);
 
 	camera.position.z () = -4000.0f;
 
@@ -117,12 +121,14 @@ int main ()
 
 	gui::ORGUI GUI;
 
-	gui::g_FontModule->LoadFont ("arial.ttf", 20, "default");
+	gui::g_FontModule->LoadFont ("arial.ttf", 13, "default");
 
 	gui::Text * timeDeltaDisplay = new gui::Text ();
 	timeDeltaDisplay->m_Font = "default";
 	timeDeltaDisplay->m_Color = gui::COLOR_WHITE;
 	GUI.AddChild (timeDeltaDisplay);
+
+	float speed = 0.0f;
 
 	bool run = true;
 	while (run)
@@ -137,6 +143,12 @@ int main ()
 			if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_ESCAPE)
 				run = false;
 
+			if (e.type == SDL_KEYDOWN)
+			{
+				if (e.key.keysym.sym == SDLK_SPACE)
+					speed = 0.0f;
+			}
+
 			if (e.type == SDL_MOUSEBUTTONDOWN)
 			{
 				if (e.button.button == SDL_BUTTON_LEFT)
@@ -149,22 +161,15 @@ int main ()
 				}
 
 				if (e.button.button == SDL_BUTTON_WHEELDOWN)
-					camera.position.z () *= scrollSpeed;
+					speed += scrollSpeed;
 				if (e.button.button == SDL_BUTTON_WHEELUP)
-					camera.position.z () /= scrollSpeed;
+					speed -= scrollSpeed;
 			}
 
 			if (e.type == SDL_MOUSEBUTTONUP)
 				isDragging = false;
 		}
 
-
-
-		int state = SDL_GetMouseState (NULL, NULL);
-		if (SDL_BUTTON (4) & state) // mousewheel up
-			camera.position.z () /= scrollSpeed;
-		if (SDL_BUTTON (5) & state) // mousewheel down
-			camera.position.z () *= scrollSpeed;
 
 		glMatrixMode (GL_MODELVIEW);
 		glLoadIdentity ();
@@ -176,6 +181,8 @@ int main ()
 			SDL_GetMouseState (&mx, &my);
 			camera.TurnByMouseDelta (mx, my);
 		}
+
+		camera.MoveForward (speed);
 
 		camera.ApplyTransformationsGL (CAMERA_SIGN_POSITIVE);
 
@@ -193,6 +200,8 @@ int main ()
 		camera.StripTransformationsGL ();
 		
 		timeDeltaDisplay->m_Text = "Time Delta: " + ore::RealToString (dt);
+		timeDeltaDisplay->m_Text += "\nSpeed: " + ore::RealToString (speed);
+		timeDeltaDisplay->m_Text += "\nPosition: (" + ore::RealToString (camera.position.x()) + "," + ore::RealToString (camera.position.y()) + "," + ore::RealToString (camera.position.z()) + ")";
 		timeDeltaDisplay->m_Position.x = 5;
 		timeDeltaDisplay->m_Position.y = 5;
 
@@ -204,8 +213,10 @@ int main ()
 
 		gluOrtho2D (0.0f, SCREEN_WIDTH, SCREEN_HEIGHT, 0.0f);
 
+		glBlendFunc (GL_ONE, GL_ONE);
 		gui::Rect renderArea (0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 		GUI.Render (&renderArea);
+		glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 		glPopMatrix ();
 

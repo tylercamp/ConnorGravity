@@ -153,4 +153,9 @@
       <Filter>Source Files\ORGUI</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="todo.txt">
+      <Filter>Source Files</Filter>
+    </Text>
+  </ItemGroup>
 </Project>
