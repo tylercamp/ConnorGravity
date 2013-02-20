@@ -56,18 +56,18 @@ void GenerateRandomBodies (NewtonianUniverse * universe)
 {
 	int bodyCount = 100;
 	int maxSpawnRange = 1500;
-	double minMass = 2.0f, maxMass = 1000000.0f;
+	double minMass = 2.0, maxMass = 1000000.0;
 	int maxVel = 150;
 	for (int i = 0; i < bodyCount; i++)
 	{
 		UniverseBody * body = new UniverseBody ();
 		body->position = vec3d (randrange (-maxSpawnRange, maxSpawnRange), randrange (-maxSpawnRange, maxSpawnRange), 0.0);
 		body->mass = randrangebinomial (minMass, maxMass);
-		double angle = randrange (0.0, 6.282);
+		double angle = randrange (0.0, MATH_2_PI);
 		double vel = randrange (0.0, maxVel);
 		body->velocity.x () = cos (angle) * vel;
 		body->velocity.y () = sin (angle) * vel;
-		body->density = 1.2f;
+		body->density = 1.2;
 		universe->AddBody (body);
 	}
 
@@ -139,7 +139,11 @@ int main ()
 	double speed = 0.0f;
 
 	BloomShader bloom;
+	bloom.Bind ();
+	glActiveTexture (GL_TEXTURE0);
 	RenderTarget target (SCREEN_WIDTH, SCREEN_HEIGHT);
+	bloom.SetSourceTexture (0);
+	glUseProgram (0);
 
 	std::cout << "Post-setup getError: " << glGetError () << std::endl;
 
@@ -200,6 +204,9 @@ int main ()
 				gluPerspective (45.0f, (double)SCREEN_WIDTH / (double)SCREEN_HEIGHT, 1.0, 1000000.0);
 
 				target.SetSize (SCREEN_WIDTH, SCREEN_HEIGHT);
+				bloom.Bind ();
+				bloom.SetSourceTexture (0);
+				glUseProgram (0);
 			}
 		}
 
@@ -226,7 +233,6 @@ int main ()
 		universe.Update (dt);
 		prevTime = curTime;
 
-		//bloom.Bind ();
 		glDisable (GL_TEXTURE_2D);
 
 		target.Bind ();
@@ -240,15 +246,13 @@ int main ()
 
 		camera.StripTransformationsGL ();
 
-		glUseProgram (0);
-
-		glViewport (0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 		glMatrixMode (GL_PROJECTION);
 		glPushMatrix ();
 		glLoadIdentity ();
 		gluOrtho2D (0.0f, SCREEN_WIDTH, SCREEN_HEIGHT, 0.0f);
 
 		ore::Generic::BindTexture (target.GetTexture ());
+		bloom.Bind ();
 		glBegin (GL_QUADS);
 			glTexCoord2f (0.0f, 1.0f);
 			glVertex2f (0.0f, 0.0f);
@@ -262,6 +266,8 @@ int main ()
 			glTexCoord2f (0.0f, 0.0f);
 			glVertex2f (0.0f, SCREEN_HEIGHT);
 		glEnd ();
+
+		glUseProgram (0);
 
 		debugFont.RenderString (5.0f, 5.0f, "glGetError: " + ore::RealToString (glGetError ()));
 

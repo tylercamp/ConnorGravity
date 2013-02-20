@@ -7,9 +7,9 @@
 /* Some convenience things */
 
 #ifndef MATH_PI
-#define MATH_2_PI	6.28318530717958f
-#define MATH_PI		3.14159265358979f
-#define MATH_PI_2	1.57079632679489f
+#define MATH_2_PI	6.28318530717958
+#define MATH_PI		3.14159265358979
+#define MATH_PI_2	1.57079632679489
 #endif
 
 #define INFINITY 1.0e+4f

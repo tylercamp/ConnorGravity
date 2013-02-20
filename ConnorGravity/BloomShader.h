@@ -58,6 +58,12 @@ public:
 		glUseProgram (m_ShaderProgram);
 	}
 
+	void SetSourceTexture (GLuint source)
+	{
+		GLuint location = glGetUniformLocation (m_ShaderProgram, "sourceTexture");
+		glUniform1i (location, source);
+	}
+
 private:
 	GLuint m_VertexShader, m_FragmentShader, m_ShaderProgram;
 

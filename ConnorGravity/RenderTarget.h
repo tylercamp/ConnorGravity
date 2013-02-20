@@ -56,11 +56,14 @@ public:
 		}
 
 		glGenTextures (1, &m_RenderBuffer);
-		glBindTexture (GL_TEXTURE_2D, m_RenderBuffer);
+		ore::Generic::BindTexture (m_RenderBuffer);
+
+
 		glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-		glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+		glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
 
 		ore::t_Byte * blankTexture = new ore::t_Byte [4 * m_BufferWidth * m_BufferHeight];
 		memset (blankTexture, 0, 4 * m_BufferWidth * m_BufferHeight);
@@ -70,7 +73,6 @@ public:
 		glGenFramebuffers (1, &m_FrameBuffer);
 		glBindFramebuffer (GL_FRAMEBUFFER, m_FrameBuffer);
 		glFramebufferTexture2D (GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_RenderBuffer, 0);
-
 		ResetRenderTarget ();
 	}
 
