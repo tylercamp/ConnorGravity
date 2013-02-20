@@ -90,49 +90,26 @@
   <ItemGroup>
     <ClCompile Include="AppMain.cpp" />
     <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="FontDefaults SDL_ttf.cpp" />
-    <ClCompile Include="ORGUI\Button.cpp" />
-    <ClCompile Include="ORGUI\FontDefaults SDL_ttf.cpp" />
-    <ClCompile Include="ORGUI\FontModule.cpp" />
-    <ClCompile Include="ORGUI\InputDefaults SDL.cpp" />
-    <ClCompile Include="ORGUI\InputModule.cpp" />
-    <ClCompile Include="ORGUI\InterfaceComponent.cpp" />
-    <ClCompile Include="ORGUI\Module.cpp" />
-    <ClCompile Include="ORGUI\ORGUI.cpp" />
-    <ClCompile Include="ORGUI\RenderDefaults OpenGL.cpp" />
-    <ClCompile Include="ORGUI\RenderModule.cpp" />
-    <ClCompile Include="ORGUI\Shapes.cpp" />
-    <ClCompile Include="ORGUI\Text.cpp" />
+    <ClCompile Include="oregFont.cpp" />
+    <ClCompile Include="oregGeneric.cpp" />
     <Text Include="todo.txt">
       <FileType>CppCode</FileType>
     </Text>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BloomShader.h" />
     <ClInclude Include="Camera.h" />
-    <ClInclude Include="Font SDL_ttf.h" />
+    <ClInclude Include="math.h" />
     <ClInclude Include="NewtonianUniverse.h" />
-    <ClInclude Include="ORGUI\Button.h" />
-    <ClInclude Include="ORGUI\Color.h" />
-    <ClInclude Include="ORGUI\Events.h" />
-    <ClInclude Include="ORGUI\Font SDL_ttf.h" />
-    <ClInclude Include="ORGUI\FontImpl.h" />
-    <ClInclude Include="ORGUI\FontModule.h" />
-    <ClInclude Include="ORGUI\Hash.h" />
-    <ClInclude Include="ORGUI\Hookable.h" />
-    <ClInclude Include="ORGUI\InputEvent SDL.h" />
-    <ClInclude Include="ORGUI\InputEvent.h" />
-    <ClInclude Include="ORGUI\InputKeyCodes.h" />
-    <ClInclude Include="ORGUI\InputModule.h" />
-    <ClInclude Include="ORGUI\InputStateChange.h" />
-    <ClInclude Include="ORGUI\InterfaceComponent.h" />
-    <ClInclude Include="ORGUI\math.h" />
-    <ClInclude Include="ORGUI\Module.h" />
-    <ClInclude Include="ORGUI\ORGUI.h" />
-    <ClInclude Include="ORGUI\Point.h" />
-    <ClInclude Include="ORGUI\RenderModule.h" />
-    <ClInclude Include="ORGUI\Shapes.h" />
-    <ClInclude Include="ORGUI\Text.h" />
+    <ClInclude Include="OpenGL.h" />
+    <ClInclude Include="oregFont.h" />
+    <ClInclude Include="oregGeneric.h" />
+    <ClInclude Include="RenderTarget.h" />
     <ClInclude Include="Settings.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Debug\fragment.frag" />
+    <None Include="..\Debug\vertex.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

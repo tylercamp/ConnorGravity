@@ -3,12 +3,17 @@
 #include <Windows.h>
 #include <mmsystem.h>
 
+#include "oregGeneric.h"
+
+#include "OpenGL.h"
+
+#include "BloomShader.h"
+#include "RenderTarget.h"
+
 #undef min
 #undef max
 
 #include <SDL\SDL.h>
-#include <gl\GL.h>
-#include <gl\GLU.h>
 #include <ctime>
 
 #include "NewtonianUniverse.h"
@@ -16,8 +21,9 @@
 
 #include "Camera.h"
 
-#include "ORGUI\ORGUI.h"
-#include "ORGUI\math.h"
+#include "oregFont.h"
+
+#include "math.h"
 
 #ifdef main
 # undef main
@@ -28,6 +34,7 @@
 #pragma comment (lib, "sdl.lib")
 #pragma comment (lib, "sdl_ttf.lib")
 #pragma comment (lib, "winmm.lib")
+#pragma comment (lib, "glew32.lib")
 
 #ifdef ORE_DEBUG
 #pragma comment (lib, "libfio-d.lib")
@@ -50,16 +57,16 @@ void GenerateRandomBodies (NewtonianUniverse * universe)
 	int bodyCount = 100;
 	int maxSpawnRange = 1500;
 	double minMass = 2.0f, maxMass = 1000000.0f;
-	int maxVel = 350;
+	int maxVel = 150;
 	for (int i = 0; i < bodyCount; i++)
 	{
 		UniverseBody * body = new UniverseBody ();
-		body->position = vec3d (randrange (-maxSpawnRange, maxSpawnRange), randrange (-maxSpawnRange, maxSpawnRange), 0.0f);
+		body->position = vec3d (randrange (-maxSpawnRange, maxSpawnRange), randrange (-maxSpawnRange, maxSpawnRange), 0.0);
 		body->mass = randrangebinomial (minMass, maxMass);
-		double angle = randrange (0.0f, 6.282f);
-		double vel = randrange (0.0f, maxVel);
-		body->velocity.x () = cosf (angle) * vel;
-		body->velocity.y () = sinf (angle) * vel;
+		double angle = randrange (0.0, 6.282);
+		double vel = randrange (0.0, maxVel);
+		body->velocity.x () = cos (angle) * vel;
+		body->velocity.y () = sin (angle) * vel;
 		body->density = 1.2f;
 		universe->AddBody (body);
 	}
@@ -92,8 +99,10 @@ int main ()
 	SDL_Init (SDL_INIT_EVERYTHING);
 	TTF_Init ();
 
-	SDL_GL_SetAttribute (SDL_GL_DEPTH_SIZE, 32);
+	//SDL_GL_SetAttribute (SDL_GL_DEPTH_SIZE, 32);
 	SDL_Surface * screen = SDL_SetVideoMode (SCREEN_WIDTH, SCREEN_HEIGHT, 32, SDL_OPENGL | SDL_RESIZABLE);
+
+	glewInit ();
 
 	glClearColor (0.0f, 0.0f, 0.0f, 0.0f);
 
@@ -124,20 +133,15 @@ int main ()
 
 	DWORD prevTime = timeGetTime ();
 
-	glDepthFunc (GL_ALWAYS);
-
-	gui::InitializeModules (gui::INIT_ALL);
-
-	gui::ORGUI GUI;
-
-	gui::g_FontModule->LoadFont ("arial.ttf", 13, "default");
-
-	gui::Text * timeDeltaDisplay = new gui::Text ();
-	timeDeltaDisplay->m_Font = "default";
-	timeDeltaDisplay->m_Color = gui::COLOR_WHITE;
-	GUI.AddChild (timeDeltaDisplay);
+	ore::Font debugFont ("arial.ttf", 16);
+	ore::t_String debugText;
 
 	double speed = 0.0f;
+
+	BloomShader bloom;
+	RenderTarget target (SCREEN_WIDTH, SCREEN_HEIGHT);
+
+	std::cout << "Post-setup getError: " << glGetError () << std::endl;
 
 	bool run = true;
 	while (run)
@@ -189,9 +193,13 @@ int main ()
 				SCREEN_WIDTH = e.resize.w;
 				SCREEN_HEIGHT = e.resize.h;
 
+				glViewport (0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+
 				glMatrixMode (GL_PROJECTION);
 				glLoadIdentity ();
 				gluPerspective (45.0f, (double)SCREEN_WIDTH / (double)SCREEN_HEIGHT, 1.0, 1000000.0);
+
+				target.SetSize (SCREEN_WIDTH, SCREEN_HEIGHT);
 			}
 		}
 
@@ -218,31 +226,46 @@ int main ()
 		universe.Update (dt);
 		prevTime = curTime;
 
+		//bloom.Bind ();
 		glDisable (GL_TEXTURE_2D);
+
+		target.Bind ();
+
+		glClear (GL_COLOR_BUFFER_BIT);
 		universe.Draw ();
+
+		target.ResetRenderTarget ();
+		
 		glEnable (GL_TEXTURE_2D);
 
 		camera.StripTransformationsGL ();
-		
-		timeDeltaDisplay->m_Text = "Time Delta: " + ore::RealToString (dt);
-		timeDeltaDisplay->m_Text += "\nSpeed: " + ore::RealToString (speed);
-		timeDeltaDisplay->m_Text += "\nPosition: (" + ore::RealToString (camera.position.x()) + "," + ore::RealToString (camera.position.y()) + "," + ore::RealToString (camera.position.z()) + ")";
-		timeDeltaDisplay->m_Position.x = 5;
-		timeDeltaDisplay->m_Position.y = 5;
 
-		glLoadIdentity ();
+		glUseProgram (0);
 
+		glViewport (0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 		glMatrixMode (GL_PROJECTION);
 		glPushMatrix ();
 		glLoadIdentity ();
-
 		gluOrtho2D (0.0f, SCREEN_WIDTH, SCREEN_HEIGHT, 0.0f);
 
-		glBlendFunc (GL_ONE, GL_ONE);
-		gui::Rect renderArea (0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-		GUI.Render (&renderArea);
-		glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		ore::Generic::BindTexture (target.GetTexture ());
+		glBegin (GL_QUADS);
+			glTexCoord2f (0.0f, 1.0f);
+			glVertex2f (0.0f, 0.0f);
 
+			glTexCoord2f (1.0f, 1.0f);
+			glVertex2f (SCREEN_WIDTH, 0.0f);
+
+			glTexCoord2f (1.0f, 0.0f);
+			glVertex2f (SCREEN_WIDTH, SCREEN_HEIGHT);
+
+			glTexCoord2f (0.0f, 0.0f);
+			glVertex2f (0.0f, SCREEN_HEIGHT);
+		glEnd ();
+
+		debugFont.RenderString (5.0f, 5.0f, "glGetError: " + ore::RealToString (glGetError ()));
+
+		glMatrixMode (GL_PROJECTION);
 		glPopMatrix ();
 
 		SDL_GL_SwapBuffers ();

@@ -1,7 +1,8 @@
 
-Color based on distance
-Body lighting
+Optimization
+Bloom
 Angular momentum/visual
+Another camera revamp
 Bounce
 Click for (anti)gravity
 Break

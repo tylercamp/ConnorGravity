@@ -52,7 +52,7 @@ public:
 
 	double radius () const
 	{
-		return powf (volume () / 4.1888f, 1.0f/3.0f);
+		return pow (volume () / 4.1888f, 1.0f/3.0f);
 	}
 
 	bool CollidesWith (UniverseBody * other) const
@@ -146,7 +146,7 @@ public:
 
 				vec3d forceVec = (*bodies)->position - (*iter)->position;
 				double dist = forceVec.length();
-				forceVec.normalize ();
+				forceVec /= dist;
 				forceVec *= (((*bodies)->mass * (*iter)->mass) / (dist * dist)) * GRAVITATIONAL_CONSTANT;
 				gravForce += forceVec;
 			}

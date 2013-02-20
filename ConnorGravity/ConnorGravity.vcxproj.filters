@@ -13,20 +13,8 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Source Files\ORGUI">
-      <UniqueIdentifier>{9394b43a-bad8-41ec-a35d-cd4af9160fd8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\ORGUI\Core">
-      <UniqueIdentifier>{fd566529-3424-40b4-8439-364ccd12e83d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\ORGUI\Interface Components">
-      <UniqueIdentifier>{65ee3681-ba72-45ce-aae6-3952a6830a16}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\ORGUI\Modules">
-      <UniqueIdentifier>{831b354a-eb47-4f7c-9802-ade31814746b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\ORGUI\Modules\Default Implementations">
-      <UniqueIdentifier>{002eaf04-ce0c-47ec-9878-adcc49a9dce0}</UniqueIdentifier>
+    <Filter Include="Source Files\Text Rendering">
+      <UniqueIdentifier>{4cc5e12d-fac5-4a3a-af4a-bd02389404e5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -36,44 +24,11 @@
     <ClCompile Include="Camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="FontDefaults SDL_ttf.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="oregFont.cpp">
+      <Filter>Source Files\Text Rendering</Filter>
     </ClCompile>
-    <ClCompile Include="ORGUI\FontModule.cpp">
-      <Filter>Source Files\ORGUI\Modules</Filter>
-    </ClCompile>
-    <ClCompile Include="ORGUI\InputModule.cpp">
-      <Filter>Source Files\ORGUI\Modules</Filter>
-    </ClCompile>
-    <ClCompile Include="ORGUI\Module.cpp">
-      <Filter>Source Files\ORGUI\Modules</Filter>
-    </ClCompile>
-    <ClCompile Include="ORGUI\RenderModule.cpp">
-      <Filter>Source Files\ORGUI\Modules</Filter>
-    </ClCompile>
-    <ClCompile Include="ORGUI\FontDefaults SDL_ttf.cpp">
-      <Filter>Source Files\ORGUI\Modules\Default Implementations</Filter>
-    </ClCompile>
-    <ClCompile Include="ORGUI\InputDefaults SDL.cpp">
-      <Filter>Source Files\ORGUI\Modules\Default Implementations</Filter>
-    </ClCompile>
-    <ClCompile Include="ORGUI\RenderDefaults OpenGL.cpp">
-      <Filter>Source Files\ORGUI\Modules\Default Implementations</Filter>
-    </ClCompile>
-    <ClCompile Include="ORGUI\Button.cpp">
-      <Filter>Source Files\ORGUI\Interface Components</Filter>
-    </ClCompile>
-    <ClCompile Include="ORGUI\Text.cpp">
-      <Filter>Source Files\ORGUI\Interface Components</Filter>
-    </ClCompile>
-    <ClCompile Include="ORGUI\InterfaceComponent.cpp">
-      <Filter>Source Files\ORGUI\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="ORGUI\ORGUI.cpp">
-      <Filter>Source Files\ORGUI\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="ORGUI\Shapes.cpp">
-      <Filter>Source Files\ORGUI\Core</Filter>
+    <ClCompile Include="oregGeneric.cpp">
+      <Filter>Source Files\Text Rendering</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -86,76 +41,36 @@
     <ClInclude Include="Camera.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="Font SDL_ttf.h">
+    <ClInclude Include="oregFont.h">
+      <Filter>Source Files\Text Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="oregGeneric.h">
+      <Filter>Source Files\Text Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="BloomShader.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="ORGUI\ORGUI.h">
-      <Filter>Source Files\ORGUI</Filter>
+    <ClInclude Include="math.h">
+      <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="ORGUI\FontImpl.h">
-      <Filter>Source Files\ORGUI\Modules</Filter>
+    <ClInclude Include="RenderTarget.h">
+      <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="ORGUI\FontModule.h">
-      <Filter>Source Files\ORGUI\Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="ORGUI\InputEvent.h">
-      <Filter>Source Files\ORGUI\Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="ORGUI\InputKeyCodes.h">
-      <Filter>Source Files\ORGUI\Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="ORGUI\InputModule.h">
-      <Filter>Source Files\ORGUI\Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="ORGUI\Module.h">
-      <Filter>Source Files\ORGUI\Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="ORGUI\RenderModule.h">
-      <Filter>Source Files\ORGUI\Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="ORGUI\Font SDL_ttf.h">
-      <Filter>Source Files\ORGUI\Modules\Default Implementations</Filter>
-    </ClInclude>
-    <ClInclude Include="ORGUI\InputEvent SDL.h">
-      <Filter>Source Files\ORGUI\Modules\Default Implementations</Filter>
-    </ClInclude>
-    <ClInclude Include="ORGUI\Button.h">
-      <Filter>Source Files\ORGUI\Interface Components</Filter>
-    </ClInclude>
-    <ClInclude Include="ORGUI\Events.h">
-      <Filter>Source Files\ORGUI\Interface Components</Filter>
-    </ClInclude>
-    <ClInclude Include="ORGUI\Text.h">
-      <Filter>Source Files\ORGUI\Interface Components</Filter>
-    </ClInclude>
-    <ClInclude Include="ORGUI\Color.h">
-      <Filter>Source Files\ORGUI\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="ORGUI\Hash.h">
-      <Filter>Source Files\ORGUI\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="ORGUI\Hookable.h">
-      <Filter>Source Files\ORGUI\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="ORGUI\InputStateChange.h">
-      <Filter>Source Files\ORGUI\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="ORGUI\InterfaceComponent.h">
-      <Filter>Source Files\ORGUI\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="ORGUI\Point.h">
-      <Filter>Source Files\ORGUI\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="ORGUI\Shapes.h">
-      <Filter>Source Files\ORGUI\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="ORGUI\math.h">
-      <Filter>Source Files\ORGUI</Filter>
+    <ClInclude Include="OpenGL.h">
+      <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="todo.txt">
       <Filter>Source Files</Filter>
     </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Debug\fragment.frag">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\Debug\vertex.vert">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>
