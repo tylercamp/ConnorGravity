@@ -70,17 +70,17 @@ namespace ore
 		int GetPerLineHeight ();
 
 	private:
-		void _RenderStringLeftAligned (float x, float y, ore::t_String text, float angle, bool autoCenter, bool outline);
-		void _RenderStringCentered (float x, float y, ore::t_String text, float angle, bool autoCenter, bool outline);
-		void _RenderStringRightAligned (float x, float y, ore::t_String text, float angle, bool autoCenter, bool outline);
+		void _RenderStringLeftAligned (float x, float y, ore::t_String text, float angle, bool autoCenter);
+		void _RenderStringCentered (float x, float y, ore::t_String text, float angle, bool autoCenter);
+		void _RenderStringRightAligned (float x, float y, ore::t_String text, float angle, bool autoCenter);
 
 		void _GenerateGlyphs (ore::t_String font, int ptSize, FontType type);
 
 		void _ApplyFontType (TTF_Font * font, FontType type);
 
-		std::vector <Glyph *> m_GlyphData, m_OutlineGlyphData;
-		GLuint m_GlyphMap, m_OutlineGlyphMap;
-		TTF_Font * m_Font, * m_OutlineFont;
+		std::vector <Glyph *> m_GlyphData;
+		GLuint m_GlyphMap;
+		TTF_Font * m_Font;
 	};
 
 }

@@ -27,28 +27,16 @@ namespace ore
 				delete m_GlyphData [i];
 			}
 		}
-		
-		for (int i = 0; i < m_OutlineGlyphData.size (); i++)
-		{
-			if (m_OutlineGlyphData [i])
-			{
-				delete m_OutlineGlyphData [i];
-			}
-		}
 
 		glDeleteTextures (1, &m_GlyphMap);
-		if (m_OutlineGlyphMap != -1)
-			glDeleteTextures (1, &m_OutlineGlyphMap);
 
-		if (m_OutlineFont)
-			TTF_CloseFont (m_OutlineFont);
 		if (m_Font)
 			TTF_CloseFont (m_Font);
 	}
 
 	void Font::RenderString (float x, float y, ore::t_String text, Font::AlignMode alignment, float angle, bool autoCenter)
 	{
-		void (ore::Font::*renderFunc)(float,float,ore::t_String,float,bool,bool);
+		void (ore::Font::*renderFunc)(float,float,ore::t_String,float,bool);
 
 		switch (alignment)
 		{
@@ -58,7 +46,7 @@ namespace ore
 		default: throw; break;
 		}
 
-		(this->*renderFunc) (x, y, text, angle, autoCenter, false);
+		(this->*renderFunc) (x, y, text, angle, autoCenter);
 	}
 
 	ore::t_String Font::FitTextToWidth (ore::t_String text, int width, ore::t_String newlinePrefix)
@@ -174,15 +162,12 @@ namespace ore
 		return TTF_FontLineSkip (m_Font);
 	}
 
-	void Font::_RenderStringLeftAligned (float x, float y, ore::t_String text, float angle, bool autoCenter, bool outline)
+	void Font::_RenderStringLeftAligned (float x, float y, ore::t_String text, float angle, bool autoCenter)
 	{
 		//	Used to move from line to line and character to character
 		float yOffset = 0.f, xOffset = 0.f;
 
-		if (outline)
-			Generic::BindTexture (m_OutlineGlyphMap);
-		else
-			Generic::BindTexture (m_GlyphMap);
+		Generic::BindTexture (m_GlyphMap);
 
 		glMatrixMode (GL_MODELVIEW);
 		glPushMatrix ();
@@ -204,11 +189,7 @@ namespace ore
 
 			if (TTF_GlyphIsProvided (m_Font, text [i]) && m_GlyphData [text [i]] != NULL)
 			{
-				Glyph * currentGlyph;
-				if (outline)
-					currentGlyph = m_OutlineGlyphData [text [i]];
-				else
-					currentGlyph = m_GlyphData [text [i]];
+				Glyph * currentGlyph = m_GlyphData [text [i]];
 
 				//	Offsets for the current glyph
 				float baseOffsetX = xOffset + currentGlyph->horizontalKerningOffset;
@@ -237,7 +218,7 @@ namespace ore
 		glPopMatrix ();
 	}
 
-	void Font::_RenderStringCentered (float x, float y, ore::t_String text, float angle, bool autoCenter, bool outline)
+	void Font::_RenderStringCentered (float x, float y, ore::t_String text, float angle, bool autoCenter)
 	{
 		ore::t_StringSet strings;
 		ore::String::SplitStringAtSymbol (text, "\n", &strings);
@@ -247,12 +228,12 @@ namespace ore
 		for (auto iter = strings.begin (); iter != strings.end (); iter++)
 		{
 			ore::t_String currentString = *iter;
-			_RenderStringLeftAligned (x - GetStringWidth (currentString) / 2.f, y + yOffset, currentString, angle, autoCenter, outline);
+			_RenderStringLeftAligned (x - GetStringWidth (currentString) / 2.f, y + yOffset, currentString, angle, autoCenter);
 			yOffset += TTF_FontLineSkip (m_Font);
 		}
 	}
 
-	void Font::_RenderStringRightAligned (float x, float y, ore::t_String text, float angle, bool autoCenter, bool outline)
+	void Font::_RenderStringRightAligned (float x, float y, ore::t_String text, float angle, bool autoCenter)
 	{
 		ore::t_StringSet strings;
 		ore::String::SplitStringAtSymbol (text, "\n", &strings);
@@ -261,17 +242,13 @@ namespace ore
 		for (auto iter = strings.begin (); iter != strings.end (); iter++)
 		{
 			ore::t_String currentString = *iter;
-			_RenderStringLeftAligned (x - GetStringWidth (currentString), y + yOffset, currentString, angle, autoCenter, outline);
+			_RenderStringLeftAligned (x - GetStringWidth (currentString), y + yOffset, currentString, angle, autoCenter);
 			yOffset += TTF_FontLineSkip (m_Font);
 		}
 	}
 
 	void Font::_GenerateGlyphs (ore::t_String font, int ptSize, FontType type)
 	{
-		// This function isn't really documented as it's pretty much the same as _GenerateGlyphsWithOutline.
-		//	The only difference is that it doesn't set m_OutlineFont to an actual object and it doesn't create
-		//	any outline glyphs. Other than that, it's almost exactly the same code.
-		m_OutlineFont = NULL;
 		m_Font = TTF_OpenFont (C_STRING (font), ptSize);
 
 		if (!m_Font)
@@ -331,7 +308,6 @@ namespace ore
 		}
 
 		glGenTextures (1, &m_GlyphMap);
-		m_OutlineGlyphMap = -1;
 		Generic::BindTexture (m_GlyphMap);
 		glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
 		glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);

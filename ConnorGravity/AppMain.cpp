@@ -54,9 +54,9 @@ double randrangebinomial (double min, double max)
 
 void GenerateRandomBodies (NewtonianUniverse * universe)
 {
-	int bodyCount = 100;
+	int bodyCount = 10;
 	int maxSpawnRange = 1500;
-	double minMass = 2.0, maxMass = 1000000.0;
+	double minMass = 200.0, maxMass = 1000000.0;
 	int maxVel = 150;
 	for (int i = 0; i < bodyCount; i++)
 	{
@@ -139,11 +139,13 @@ int main ()
 	double speed = 0.0f;
 
 	BloomShader bloom;
-	bloom.Bind ();
-	glActiveTexture (GL_TEXTURE0);
-	RenderTarget target (SCREEN_WIDTH, SCREEN_HEIGHT);
-	bloom.SetSourceTexture (0);
 	glUseProgram (0);
+	RenderTarget target (SCREEN_WIDTH, SCREEN_HEIGHT);
+
+	bloom.SetSourceTexture (target.GetTexture ());
+	bloom.SetSampleCount (3);
+
+	bloom.ConfigureTargetsForResolution (SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	std::cout << "Post-setup getError: " << glGetError () << std::endl;
 
@@ -204,9 +206,8 @@ int main ()
 				gluPerspective (45.0f, (double)SCREEN_WIDTH / (double)SCREEN_HEIGHT, 1.0, 1000000.0);
 
 				target.SetSize (SCREEN_WIDTH, SCREEN_HEIGHT);
-				bloom.Bind ();
-				bloom.SetSourceTexture (0);
-				glUseProgram (0);
+				bloom.ConfigureTargetsForResolution (SCREEN_WIDTH, SCREEN_HEIGHT);
+				bloom.SetSourceTexture (target.GetTexture ());
 			}
 		}
 
@@ -240,7 +241,7 @@ int main ()
 		glClear (GL_COLOR_BUFFER_BIT);
 		universe.Draw ();
 
-		target.ResetRenderTarget ();
+		RenderTarget::ResetRenderTarget ();
 		
 		glEnable (GL_TEXTURE_2D);
 
@@ -251,8 +252,8 @@ int main ()
 		glLoadIdentity ();
 		gluOrtho2D (0.0f, SCREEN_WIDTH, SCREEN_HEIGHT, 0.0f);
 
+		/*
 		ore::Generic::BindTexture (target.GetTexture ());
-		bloom.Bind ();
 		glBegin (GL_QUADS);
 			glTexCoord2f (0.0f, 1.0f);
 			glVertex2f (0.0f, 0.0f);
@@ -266,8 +267,14 @@ int main ()
 			glTexCoord2f (0.0f, 0.0f);
 			glVertex2f (0.0f, SCREEN_HEIGHT);
 		glEnd ();
+		*/
 
-		glUseProgram (0);
+		glBlendFunc (GL_SRC_ALPHA, GL_ONE);
+
+		glColor4f (1.0, 1.0, 1.0, 1.0);
+		bloom.RenderBloom ();
+
+		glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 		debugFont.RenderString (5.0f, 5.0f, "glGetError: " + ore::RealToString (glGetError ()));
 

@@ -32,7 +32,17 @@ public:
 		ConfigureBuffers ();
 	}
 
-	void ResetRenderTarget ()
+	int GetWidth ()
+	{
+		return m_BufferWidth;
+	}
+
+	int GetHeight ()
+	{
+		return m_BufferHeight;
+	}
+
+	static void ResetRenderTarget ()
 	{
 		glBindFramebuffer (GL_FRAMEBUFFER, 0);
 	}
@@ -61,8 +71,8 @@ public:
 
 		glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+		glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
 
 
 		ore::t_Byte * blankTexture = new ore::t_Byte [4 * m_BufferWidth * m_BufferHeight];
